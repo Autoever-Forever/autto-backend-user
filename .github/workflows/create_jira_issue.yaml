@@ -72,7 +72,7 @@ jobs:
       uses: actions-cool/issues-helper@v3
       with:
         actions: 'create-comment'
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.TOKEN_GITHUB }}
         issue-number: ${{ github.event.issue.number }}
         body: 'Jira Issue Created: [${{ steps.create.outputs.issue }}](${{ secrets.JIRA_BASE_URL }}/browse/${{ steps.create.outputs.issue }})'
     
