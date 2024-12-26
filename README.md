@@ -11,8 +11,6 @@
 
 UserService/src/main/resources/application-{본인이 사용할 프로필명}.yml
 
----
-
 ## 2. **프로필 활성화 설정 추가하기**
 생성한 `.yml` 파일에 아래 코드를 추가합니다.
 
