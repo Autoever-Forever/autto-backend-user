@@ -1,0 +1,7 @@
+spring:
+  config:
+    activate:
+      on-profile: youngjin # 사용할 프로필명
+
+  application:
+    name: UserService
