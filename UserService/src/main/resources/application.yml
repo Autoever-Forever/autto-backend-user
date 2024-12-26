@@ -1,4 +1,4 @@
-# ?? application.yml
+# 기본 application.yml
 spring:
   profiles:
-    active: woong # ??? application.yml ? ??? ??
+    active: woong # 사용할 프로필명
