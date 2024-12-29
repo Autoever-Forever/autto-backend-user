@@ -1,35 +1,41 @@
 package com.autto.userservice.controller;
 
 import com.autto.userservice.dto.SignUpDto;
-import com.autto.userservice.dto.SignUpResponseDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.autto.userservice.service.SignUpService;
-import org.springframework.http.HttpStatus;
+import com.autto.userservice.dto.SignUpResponseDto;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+
+@Slf4j
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class SignUpController {
-    private static final Logger logger = LoggerFactory.getLogger(SignUpController.class);
+    private final SignUpService signUpService;
 
-    @Autowired
-    private SignUpService SignUpService;
+    // 이메일 중복 확인
+    @GetMapping("/check-email")
+    public ResponseEntity<SignUpResponseDto> checkEmail(@RequestParam @Email String email) {
+        SignUpResponseDto response = signUpService.checkEmailDuplicate(email);
+        return ResponseEntity.ok(response);
+    }
 
-    @PostMapping("/signUp")
-    public ResponseEntity<SignUpResponseDto> SignUp(@RequestBody SignUpDto SignUpDto) {
-        try {
-            SignUpResponseDto response = SignUpService.registerUser(SignUpDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (Exception e) {
-            logger.error("회원가입 중 오류 발생", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(SignUpResponseDto.setFailed("회원가입에 실패했습니다."));
-        }
+    // 인증 이메일 전송
+    @PostMapping("/send-verification")
+    public ResponseEntity<SignUpResponseDto> sendVerificationEmail(@RequestParam @Email String email) {
+        SignUpResponseDto response = signUpService.sendVerificationEmail(email);
+        return ResponseEntity.ok(response);
+    }
+
+    // 회원가입
+    @PostMapping("/signup")
+    public ResponseEntity<SignUpResponseDto> signUp(@RequestBody @Valid SignUpDto signUpDto) {
+        SignUpResponseDto response = signUpService.signUp(signUpDto);
+        return ResponseEntity.ok(response);
     }
 }
