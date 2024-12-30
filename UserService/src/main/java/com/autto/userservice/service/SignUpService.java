@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.Map;
+import java.util.HashMap;
 
 import java.util.UUID;
 
@@ -53,6 +55,7 @@ public class SignUpService {
             return SignUpResponseDto.setFailed("인증 코드가 올바르지 않습니다.");
         }
 
+
         if (userRepository.existsByEmail(signUpDto.getEmail())) {
             return SignUpResponseDto.setFailed("이미 사용 중인 이메일입니다.");
         }
@@ -72,6 +75,12 @@ public class SignUpService {
 
         //인증코드 삭제
         emailVerificationService.removeVerificationCode(signUpDto.getEmail());
-        return SignUpResponseDto.setSuccess("회원가입이 성공적으로 완료되었습니다.");
+
+        // 성공 응답에 사용자 이름과 이메일 포함
+        Map<String, String> userData = new HashMap<>();
+        userData.put("name", user.getName());
+        userData.put("email", user.getEmail());
+
+        return SignUpResponseDto.setSuccessData("회원가입이 성공적으로 완료되었습니다.", userData);
     }
 }
