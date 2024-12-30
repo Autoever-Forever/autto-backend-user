@@ -11,37 +11,5 @@ spring:
     username: root
     password: "000000" #비밀번호 : 환경 변수로 분리하거나 Secrets Manager를 사용
 
-  jpa:
-    open-in-view: false
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        id:
-          new_generator_mappings: true
-        format_sql: true
-        show_sql: true
-
-  mail:
-    host: smtp.naver.com
-    port: 465
-    username: et0709@naver.com
-    password: w6978979
-    properties:
-      mail:
-        smtp:
-          auth: true # SMTP 서버 인증을 활성화
-          ssl:
-            enable: true
-            trust: smtp.naver.com
-          starttls:
-            enable: true #STARTTLS(암호화 프로토콜)를 활성화(메일 전송 중 데이터 암호화를 지원)
-
-
-logging:
-  level:
-    org.springframework.security: DEBUG
-
-# 인증 코드 만료 시간: 30 * 60 * 1000 == 30분
-custom:
-  auth-code-expiration-millis: "1800000"
+jwt:
+  secret: false

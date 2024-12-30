@@ -1,4 +1,39 @@
 # 기본 application.yml
 spring:
   profiles:
-    active: woong # 사용할 프로필명
+    active: youngjin # 사용할 프로필명
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        id:
+          new_generator_mappings: true
+        format_sql: true
+        show_sql: true
+
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: et0709@naver.com
+    password: w6978979
+    properties:
+      mail:
+        smtp:
+          auth: true # SMTP 서버 인증을 활성화
+          ssl:
+            enable: true
+            trust: smtp.naver.com
+          starttls:
+            enable: true #STARTTLS(암호화 프로토콜)를 활성화(메일 전송 중 데이터 암호화를 지원)
+
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+# 인증 코드 만료 시간: 30 * 60 * 1000 == 30분
+custom:
+  auth-code-expiration-millis: "1800000"
