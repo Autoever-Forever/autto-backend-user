@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/user
     username: root
-    password: 1920
+    password: #비밀번호
   thymeleaf:
     cache: false
 
@@ -21,7 +21,3 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-
-# jwt 토큰 설정 관련
-jwt:
-  secret: 64461f01e1af406da538b9c48d801ce59142452199ff112fb5404c8e7e98e3ff
