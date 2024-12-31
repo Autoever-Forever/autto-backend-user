@@ -12,16 +12,5 @@ spring:
     username: root
     password: "000000" #비밀번호 : 환경 변수로 분리하거나 Secrets Manager를 사용
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      password: ""
-      timeout: 2000 #Redis 서버와의 연결 타임아웃을 설정 (2초)
 jwt:
   secret: false
-
-logging:
-  level:
-    org.springframework.data.redis: DEBUG
-    org.springframework.mail: DEBUG

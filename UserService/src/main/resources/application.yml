@@ -29,10 +29,18 @@ spring:
           starttls:
             enable: true #STARTTLS(암호화 프로토콜)를 활성화(메일 전송 중 데이터 암호화를 지원)
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: ""
+      timeout: 2000 #Redis 서버와의 연결 타임아웃을 설정 (2초)
 
 logging:
   level:
     org.springframework.security: DEBUG
+    org.springframework.data.redis: DEBUG
+    org.springframework.mail: DEBUG
 
 # 인증 코드 만료 시간: 30 * 60 * 1000 == 30분
 custom:
