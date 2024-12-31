@@ -3,14 +3,16 @@ package com.autto.userservice.entity;
 import com.autto.userservice.util.UUIDUtils;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -19,7 +21,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Table(name = "user")
-public class User {
+// UserDetails 는 Spring Security 프레임워크에서 제공하는 인터페이스
+public class User implements UserDetails {
     @Id
     @Column(name = "id", columnDefinition = "BINARY(16)", updatable = false, nullable = false)
     private byte[] uuid; // 고유 사용자 ID (UUID)
@@ -46,6 +49,7 @@ public class User {
     @Column(nullable = false, length = 100)
     private String name; // 사용자 이름
 
+    @Getter
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
     private Role role; // 역할 (기본값: 'user')
@@ -61,6 +65,42 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "user_status", nullable = false, length = 10)
     private UserStatus userStatus; // 가입 상태 (기본값: 'active')
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // ROLE_USER, ROLE_ADMIN 을 권한으로 반환하도록 수정
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return userPw;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired(); // true 반환 : 계정 만료 제약 없음
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked(); // true 반환 : 계정 잠금 제약 없음
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired(); // true 반환 : 자격 증명 만료 제한 없음
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled(); // true 반환 : 모든 계정 활성화
+    }
 
     public enum Role {
         ADMIN, USER

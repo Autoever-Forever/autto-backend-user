@@ -1,11 +1,11 @@
 package com.autto.userservice.provider;
 
 import com.autto.userservice.dto.JwtToken;
-import com.autto.userservice.jwt.JwtProperties;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,9 +26,9 @@ public class JwtTokenProvider {
     private final Key key;
 
     // application.yml에서 secret 값 가져와서 key에 저장
-    public JwtTokenProvider(JwtProperties jwtProperties) {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
-        log.info("Loaded JWT Secret Key: {}", jwtProperties.getSecret());
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        log.info("-----------------Loaded JWT Secret Key: {}", secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
