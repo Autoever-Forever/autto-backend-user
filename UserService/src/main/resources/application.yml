@@ -1,18 +1,21 @@
 # 기본 application.yml
 spring:
   profiles:
-    active: youngjin # 사용할 프로필명
+    active: woong # 사용할 프로필명
 
+  # spring data jpa
   jpa:
     open-in-view: false
     hibernate:
       ddl-auto: create
+    database-platform: org.hibernate.dialect.MySQLDialect
     properties:
       hibernate:
         id:
           new_generator_mappings: true
         format_sql: true
         show_sql: true
+        open-in-view: false
 
   mail:
     host: smtp.naver.com
@@ -45,3 +48,12 @@ logging:
 # 인증 코드 만료 시간: 30 * 60 * 1000 == 30분
 custom:
   auth-code-expiration-millis: "1800000"
+
+# jwt 토큰 설정 관련
+# 윤정 정의 속성 - /UserService/src/main/resources/META-INF/additional-spring-configuration-metadata.json
+jwt:
+  secret: 64461f01e1af406da538b9c48d801ce59142452199ff112fb5404c8e7e98e3ff
+  # 일 단위로 설정
+  expiration:
+    access: 7
+    refresh: 14
