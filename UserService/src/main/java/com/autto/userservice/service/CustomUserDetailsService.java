@@ -2,6 +2,8 @@ package com.autto.userservice.service;
 
 import com.autto.userservice.entity.User;
 import com.autto.userservice.persistence.UserRepository;
+import com.autto.userservice.response.CustomUsernameNotFoundException;
+import com.autto.userservice.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws CustomUsernameNotFoundException {
         return userRepository.getByEmail(email)
                 .map(this::createUserDetails)
                 .orElseThrow(() -> new UsernameNotFoundException("해당하는 회원을 찾을 수 없습니다."));

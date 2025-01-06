@@ -1,7 +1,7 @@
 # 기본 application.yml
 spring:
   profiles:
-    active: youngjin # 사용할 프로필명
+    active: woong # 사용할 프로필명
 
   # spring data jpa
   jpa:
