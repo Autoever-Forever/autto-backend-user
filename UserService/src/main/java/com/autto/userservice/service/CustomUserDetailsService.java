@@ -34,7 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     // 해당하는 User 의 데이터가 존재한다면 UserDetails 객체로 만들어서 return
     private UserDetails createUserDetails(User user) {
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
+                .username(user.getUuidHex())
                 .password(user.getPassword())
                 // 로컬에서 암호화 안한 비밀번호로 테스트시 사용
 //                .password(passwordEncoder.encode(user.getPassword()))
