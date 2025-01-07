@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.HashMap;
 
-import java.util.UUID;
-
 //회원가입 전체 프로세스
 @Data
 @Service
@@ -80,6 +78,8 @@ public class SignUpService {
         Map<String, String> userData = new HashMap<>();
         userData.put("name", user.getName());
         userData.put("email", user.getEmail());
+        //UUID확인용
+        //userData.put("id", user.getUuidHex());
 
         return SignUpResponseDto.setSuccessData("회원가입이 성공적으로 완료되었습니다.", userData);
     }

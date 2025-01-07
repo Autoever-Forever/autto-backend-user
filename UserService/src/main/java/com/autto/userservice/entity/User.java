@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.codec.Hex;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -30,7 +31,8 @@ public class User implements UserDetails {
     @PrePersist
     public void prePersist() {
         if (uuid == null) {
-            UUID generatedUuid = UUID.randomUUID();  // 새로운 UUID 생성
+            UUID generatedUuid = UUID.randomUUID(); // 새로운 UUID 생성
+            System.out.println(generatedUuid);
             uuid = UUIDUtils.asBytes(generatedUuid); // UUID를 byte[]로 변환하여 uuid 필드에 저장
         }
     }
