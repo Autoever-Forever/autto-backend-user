@@ -1,6 +1,7 @@
 package com.autto.userservice.service;
 
 import com.autto.userservice.dto.JwtToken;
+import com.autto.userservice.entity.User;
 import com.autto.userservice.persistence.UserRepository;
 import com.autto.userservice.provider.JwtTokenProvider;
 import com.autto.userservice.response.CustomUsernameNotFoundException;
@@ -37,11 +38,23 @@ public class SignInServiceImpl implements SignInService {
             // authenticate 메서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드 실행
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-            // 3. 인증 정보를 기반으로 JWT 토큰 생성
-            JwtToken jwtToken;
-            jwtToken = jwtTokenProvider.generateToken(authentication);
+            //영진추가
+            // 3. 사용자 정보 조회
+            User user = userRepository.getByEmail(email)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            //영진추가
+            // 4. JWT 토큰 생성
+            JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
+            //영진추가
+            // 5. 사용자의 이메일과 이름을 추가한 jwtToken 객체 반환
+            return JwtToken.builder()
+                    .grantType(jwtToken.getGrantType())
+                    .accessToken(jwtToken.getAccessToken())
+                    .refreshToken(jwtToken.getRefreshToken())
+                    .email(user.getEmail())
+                    .name(user.getName())
+                    .build();
 
-            return jwtToken;
         } catch (UsernameNotFoundException ex) {
             // 이메일이 틀릴 경우 예외 발생
             throw new UsernameNotFoundException("");  // 이메일 오류
