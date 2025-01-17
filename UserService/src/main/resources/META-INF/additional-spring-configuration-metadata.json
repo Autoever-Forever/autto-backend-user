@@ -1,0 +1,23 @@
+{
+  "properties": [
+    {
+      "name": "jwt.secret",
+      "type": "java.lang.String",
+      "description": "Description for spring.jwt.secret."
+    },
+    {
+      "name": "jwt.expiration",
+      "type": "java.lang.String",
+      "description": "Description for expiration."
+    },
+    {
+      "name": "jwt.expiration.access",
+      "type": "java.lang.Integer",
+      "description": "Description for expiration of accessToken."
+    },
+    {
+      "name": "jwt.expiration.refresh",
+      "type": "java.lang.Integer",
+      "description": "Description for expiration of refreshToken."
+    }
+] }
