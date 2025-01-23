@@ -1,0 +1,65 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:UserDB}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:1234}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+  
+  thymeleaf:
+    cache: false
+  
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:update}
+      properties:
+        hibernate:
+          id:
+            new_generator_mappings: true
+          format_sql: true
+  
+  mail:
+    host: ${MAIL_HOST:smtp.naver.com}
+    port: ${MAIL_PORT:465}
+    username: ${SPRING_MAIL_USERNAME:et0709@naver.com}
+    password: ${SPRING_MAIL_PASSWORD:w6978979}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+            trust: ${MAIL_HOST:smtp.naver.com}
+          starttls:
+            enable: true
+  
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        data:
+          redis: DEBUG
+        mail: DEBUG
+
+custom:
+  auth-code-expiration-millis: ${AUTH_CODE_EXPIRATION:1800000}
+
+jwt:
+  secret: ${JWT_SECRET:64461f01e1af406da538b9c48d801ce59142452199ff112fb5404c8e7e98e3ff}
+  expiration:
+    access: ${JWT_ACCESS_EXPIRATION:7}
+    refresh: ${JWT_REFRESH_EXPIRATION:14}
