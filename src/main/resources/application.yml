@@ -64,4 +64,4 @@ jwt:
     access: ${JWT_ACCESS_EXPIRATION:7}
     refresh: ${JWT_REFRESH_EXPIRATION:14}
 server:
-  port: ${SEVER_PORT:8080}
+  port: ${SERVER_PORT:8080}
