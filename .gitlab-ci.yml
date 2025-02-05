@@ -7,6 +7,8 @@ variables:
   DOCKERHUB_USERNAME: "auttto"
   GITLAB_REPO: "backend-user"  # GitLab 레포지토리 URL
   GITLAB_TOKEN: "$CI_JOB_TOKEN"  # GitLab CI 환경 변수에서 자동으로 제공되는 토큰
+  TIMESTAMP: "$(date +%y%m%d%H%M)"  # YYMMDDHHMM 형식의 타임스탬프
+  IMAGE_TAG: "${DOCKERHUB_REPO}:${TIMESTAMP}" # 이미지 태그 정의
   # GITLAB_URL  # GitLab 주소 - secret variable 에 정의
   # DOCKERHUB_PASSWORD # DOCKERHUB 비밀번호 - secret variable 에 정의
 
