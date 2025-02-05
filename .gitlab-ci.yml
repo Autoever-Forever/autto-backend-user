@@ -37,15 +37,16 @@ image_push:
   stage: push
   script:
     # 가장 최근 태그를 가져오기
-    - git fetch --tags
-    - LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0.${CI_PIPELINE_ID}") # 태그가 없다면 기본 v0.0.0.{파이프라인 실행 ID} 태그 부여
+    - VERSION_TAG=$(git describe --tags --abbrev=0)
     
     # 이미지 태그 부여
-    - IMAGE_TAG=${DOCKERHUB_REPO}:${LAST_TAG}
+    - IMAGE_TAG=${DOCKERHUB_REPO}:${VERSION_TAG}
     
     # 사전 확인
     - docker images  # 현재 존재하는 이미지 목록 출력
-    - echo "🔍 Using Git tag for Docker image: ${LAST_TAG}"
+    - echo "----------------- 이미지 태그 -----------------"
+    - echo "Image tag: $IMAGE_TAG"
+ 
 
     # Docker 로그인
     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
