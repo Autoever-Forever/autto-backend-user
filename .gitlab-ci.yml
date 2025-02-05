@@ -40,10 +40,7 @@ image_push:
     - LAST_TAG=$(git describe --tags --abbrev=0)
     
     # 태그가 없다면 기본 v0.0.0 태그 부여
-    - |
-      if [ -z "$LAST_TAG" ]; then
-        LAST_TAG="v0.1.0";
-      fi
+    - if [ -z "$LAST_TAG" ]; then LAST_TAG="v0.1.0"; fi
     
     # 이미지 태그 부여
     - IMAGE_TAG=${DOCKERHUB_REPO}:${LAST_TAG}
