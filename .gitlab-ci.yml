@@ -36,13 +36,19 @@ image_build:
 image_push:
   stage: push
   script:
-    # 이미지 태그 생성
-    - IMAGE_TAG="${DOCKERHUB_REPO}:$(date +%y%m%d%H%M)"  # YYMMDDHHMM 형식의 타임스탬프
-
+    # 가장 최근 태그를 가져오기
+    - git fetch --tags
+    - LAST_TAG=$(git describe --tags --abbrev=0)
+    
+    # 태그가 없다면 기본 v0.0.0 태그 부여
+    - if [ -z "$LAST_TAG" ]; then LAST_TAG="v0.1.0"; fi
+    
+    # 이미지 태그 부여
+    - IMAGE_TAG=${DOCKERHUB_REPO}:${LAST_TAG}
+    
     # 사전 확인
     - docker images  # 현재 존재하는 이미지 목록 출력
-    - echo "----------------- 이미지 태그 -----------------"
-    - echo "${IMAGE_TAG}"
+    - echo "🔍 Using Git tag for Docker image: ${LAST_TAG}"
 
     # Docker 로그인
     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
