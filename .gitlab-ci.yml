@@ -55,11 +55,11 @@ image_update:
   stage: update
   script:
     - echo "Updating image tag in charts repo..."
-    - git clone https://gitlab-ci-token:${GITLAB_TOKEN}@${GITLAB_URL}/${CHART_REPO}.git
+    - git clone "https://gitlab-ci-token:${GITLAB_TOKEN}@${GITLAB_URL}/${CHART_REPO}.git"
     - cd ${CHART_REPO}
     - cd user-service
     # 이미지 태그 변경
-    - sed -i "s|tag: .*|tag: ${VERSION_NAME}|" values.yaml  
+    - sed -i "s|tag: .*|tag: \"${VERSION_NAME}\"|" values.yaml  
     - git config user.email "jangs1920@gmail.com"
     - git config user.name "imdanaa"
     - git add values.yaml
