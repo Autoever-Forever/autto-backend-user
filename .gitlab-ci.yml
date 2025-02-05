@@ -38,8 +38,6 @@ image_build:
 image_push:
   stage: push
   script:
-    - def timestamp = sh(script: "date +%y%m%d%H%M", returnStdout: true).trim() # 날짜 형식을 UNIX 타임스탬프로 변환
-    - def image_tag = "${DOCKER_REPO}:${timestamp}"
     # Docker 로그인
     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
