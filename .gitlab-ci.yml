@@ -7,8 +7,6 @@ variables:
   DOCKERHUB_USERNAME: "auttto"
   GITLAB_REPO: "backend-user"  # GitLab 레포지토리 URL
   GITLAB_TOKEN: "$CI_JOB_TOKEN"  # GitLab CI 환경 변수에서 자동으로 제공되는 토큰
-  TIMESTAMP: "$(date +%y%m%d%H%M)"  # YYMMDDHHMM 형식의 타임스탬프
-  IMAGE_TAG: "${DOCKERHUB_REPO}:${TIMESTAMP}" # 이미지 태그 정의
   # GITLAB_URL  # GitLab 주소 - secret variable 에 정의
   # DOCKERHUB_PASSWORD # DOCKERHUB 비밀번호 - secret variable 에 정의
 
@@ -38,6 +36,14 @@ image_build:
 image_push:
   stage: push
   script:
+    # 이미지 태그 생성
+    - IMAGE_TAG="${DOCKERHUB_REPO}:$(date +%y%m%d%H%M)"  # YYMMDDHHMM 형식의 타임스탬프
+
+    # 사전 확인
+    - docker images  # 현재 존재하는 이미지 목록 출력
+    - echo "----------------- 이미지 태그 -----------------"
+    - echo "${IMAGE_TAG}"
+
     # Docker 로그인
     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
