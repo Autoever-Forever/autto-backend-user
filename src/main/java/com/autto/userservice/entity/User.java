@@ -45,7 +45,7 @@ public class User implements UserDetails {
     @Column(name = "email", nullable = false, unique = true, length = 320)
     private String email; // 사용자 이메일
 
-    @Column(name = "user_pw", nullable = false, length = 255)
+    @Column(name = "password", nullable = false, length = 255)
     private String userPw; // 사용자 비밀번호 (암호화 적용 필요)
 
     @Column(nullable = false, length = 100)
@@ -65,7 +65,7 @@ public class User implements UserDetails {
     private LocalDateTime lastUpdate; // 마지막 업데이트
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_status", nullable = false, length = 10)
+    @Column(name = "status", nullable = false, length = 10)
     private UserStatus userStatus; // 가입 상태 (기본값: 'active')
 
     @Override
