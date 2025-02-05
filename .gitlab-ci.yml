@@ -46,7 +46,6 @@ image_push:
     - docker images  # 현재 존재하는 이미지 목록 출력
     - echo "----------------- 이미지 태그 -----------------"
     - echo "Image tag:${IMAGE_TAG}"
- 
 
     # Docker 로그인
     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
