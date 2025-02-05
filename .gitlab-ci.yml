@@ -24,7 +24,7 @@ checkout:
   stage: checkout
   script:
     - echo "Cloning repository from GitLab..."
-    - git clone --depth=100 http://gitlab-ci-token:${GITLAB_TOKEN}@${GITLAB_URL}/${GITLAB_REPO}.git # GitLab 토큰으로 인증
+    - git clone http://gitlab-ci-token:${GITLAB_TOKEN}@${GITLAB_URL}/${GITLAB_REPO}.git # GitLab 토큰으로 인증
     - cd $GITLAB_REPO
 
 image_build:
@@ -37,15 +37,16 @@ image_push:
   stage: push
   script:
     # 가장 최근 태그를 가져오기
-    - VERSION_TAG=$(git describe --tags --abbrev=0)
-    
+    - git fetch --tags
+    - VERSION_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0.${CI_PIPELINE_ID}") # 태그가 없다면 기본 v0.0.0.{파이프라인 실행 ID} 태그 부여
+
     # 이미지 태그 부여
     - IMAGE_TAG=${DOCKERHUB_REPO}:${VERSION_TAG}
 
     # 사전 확인
     - docker images  # 현재 존재하는 이미지 목록 출력
     - echo "----------------- 이미지 태그 -----------------"
-    - echo "Image tag:${IMAGE_TAG}"
+    - echo "🔍 Using Image tag:${IMAGE_TAG}"
 
     # Docker 로그인
     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
