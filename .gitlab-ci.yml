@@ -1,0 +1,44 @@
+image: docker:latest
+
+variables:
+  DOCKER_IMAGE: "userservice-image:latest"
+  REGISTRY_URL: "docker.io"
+  DOCKERHUB_REPO: "auttto/autto-userservice"
+  DOCKERHUB_USERNAME: "auttto"
+  GITLAB_REPO: "backend-user"  # GitLab 레포지토리 URL
+  GITLAB_TOKEN: "$CI_JOB_TOKEN"  # GitLab CI 환경 변수에서 자동으로 제공되는 토큰
+  # GITLAB_URL  # GitLab 주소 - secret variable 에 정의
+  # DOCKERHUB_PASSWORD # DOCKERHUB 비밀번호 - secret variable 에 정의
+
+# main 브랜치에서만 파이프라인 실행
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+stages:
+  - checkout
+  - build
+  - push
+
+checkout:
+  stage: checkout
+  script:
+    - echo "Cloning repository from GitLab..."
+    - git clone https://gitlab-ci-token:${GITLAB_TOKEN}${GITLAB_URL}/${GITLAB_REPO}.git  # GitLab 토큰으로 인증
+    - cd $GITLAB_REPO
+
+image_build:
+  stage: build
+  script:
+    - echo "Building Docker image..."
+    - docker build -t $DOCKER_IMAGE .
+
+image_push:
+  stage: push
+  script:
+    # Docker 로그인
+    - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+    # 태깅 및 푸시
+    - docker tag $DOCKER_IMAGE $IMAGE_TAG
+    - docker push $IMAGE_TAG
