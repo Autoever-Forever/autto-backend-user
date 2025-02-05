@@ -15,14 +15,6 @@ workflow:
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
 
-before_script:
-  # 최근 커밋 메시지에서 'release: version X.Y' 형식의 버전 정보 추출
-  - VERSION=$(git log -1 --pretty=%B | grep -oP 'release:\s+version\s+\K\d+\.\d+')
-  - VERSION_CODE=$CI_PIPELINE_IID  # 파이프라인 ID
-  - VERSION_NAME="$VERSION.$VERSION_CODE" # X.Y.pipeline-id 형식으로 변경
-  - echo "Version set to: $VERSION_NAME"
-  - IMAGE_TAG="$DOCKERHUB_REPO:$VERSION_NAME" # 이미지 태그 생성
-
 stages:
   - checkout
   - build
