@@ -24,7 +24,7 @@ checkout:
   stage: checkout
   script:
     - echo "Cloning repository from GitLab..."
-    - git clone https://gitlab-ci-token:${GITLAB_TOKEN}@${GITLAB_URL}/${GITLAB_REPO}.git # GitLab 토큰으로 인증
+    - git clone http://gitlab-ci-token:${GITLAB_TOKEN}@${GITLAB_URL}/${GITLAB_REPO}.git # GitLab 토큰으로 인증
     - cd $GITLAB_REPO
 
 image_build:
