@@ -46,11 +46,11 @@ image_push:
     
     # 이미지 태그 부여
     - IMAGE_TAG=${DOCKERHUB_REPO}:${LAST_TAG}
+    
     # 사전 확인
     - docker images  # 현재 존재하는 이미지 목록 출력
     - echo "----------------- 이미지 태그 -----------------"
     - echo "Image tag: $LAST_TAG"
- 
 
     # Docker 로그인
     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
