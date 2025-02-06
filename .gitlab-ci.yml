@@ -6,9 +6,11 @@ variables:
   DOCKERHUB_REPO: "auttto/autto-userservice"
   DOCKERHUB_USERNAME: "auttto"
   GITLAB_TOKEN: "$CI_JOB_TOKEN"  # GitLab CI 환경 변수에서 자동으로 제공되는 토큰
+  GITLAB_USERNAME: root # push 작업을 수행할 GitLab 유저명
   # GITLAB_URL  # GitLab 주소 - secret variable 에 정의
   # DOCKERHUB_PASSWORD # DOCKERHUB 비밀번호 - secret variable 에 정의
-  #GITLAB_CHART_REPO  # Helm 차트의 GitLab 레포지토리 이름 - secret variable 에 정의
+  # GITLAB_CHART_REPO  # Helm 차트의 GitLab 레포지토리 이름 - secret variable 에 정의
+  # GITLAB_PASSWORD # push 작업을 수행할 GitLab 유저의 암호 - secret variable 에 정의
 
 # main 브랜치에서만 파이프라인 실행
 workflow:
@@ -85,4 +87,4 @@ update_helm_chart:
     - git add values.yaml
     - git add Chart.yaml
     - git commit -m "AF-145 cicd:\s이미지 버전 변경 - ${IMAGE_TAG}"
-    - git push http://gitlab-ci-token:${HELM_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git main
+    - git push http://$GITLAB_USERNAME:$GITLAB_PASSWORD@${GITLAB_URL}/${GITLAB_CHART_REPO}.git main
