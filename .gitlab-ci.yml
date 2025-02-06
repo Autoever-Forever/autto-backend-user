@@ -90,7 +90,7 @@ update_helm_chart:
     - yq -i ".appVersion = \"${IMAGE_TAG:-latest}\"" Chart.yaml # Chart 파일의 앱 버전 태그 변경
     - git add values.yaml
     - git add Chart.yaml
-    - git commit -m "AF-145 cicd:\ 이미지 버전 변경 - $IMAGE_TAG"
+    - git commit -m "AF-145 cicd:이미지 버전 변경 - $IMAGE_TAG"
     - git push http://gitlab-ci-token:${HELM_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git main
   # image_push_dockerhub 에서 정의한 환경변수 사용
   dependencies:
