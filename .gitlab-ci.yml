@@ -16,10 +16,16 @@ workflow:
     - if: '$CI_COMMIT_BRANCH == "main"'
 
 stages:
+  - organize # 이미지 정리
   - build # 이미지 빌드
   - push_dockerhub # 이미지 도커 허브에 푸쉬
   - clone_helm # 헬름차트 클론
   - update_helm # 헬름차트 업데이트
+
+image_organize:
+  stage: organize
+  script:
+    - docker image prune -a -f # 사용하지 않는 이미지 정리
 
 image_build:
   stage: build
@@ -42,7 +48,7 @@ image_push_dockerhub:
     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
     
     # 태깅 및 푸시
-    - echo "📤 Pushing ${IMAGE} image to DockerHub..."
+    - echo "📤 Pushing $IMAGE image to DockerHub..."
     - docker tag $DOCKER_IMAGE $IMAGE
     - docker push $IMAGE
 
@@ -59,7 +65,7 @@ checkout_helm_chart:
 update_helm_chart:
   stage: update_helm
   script:
-    - echo "📝 Updating values.yaml with new tag 👉🏻:${IMAGE_TAG}👈🏻"
+    - echo "📝 Updating values.yaml with new tag 👉🏻$IMAGE_TAG👈🏻"
     - git checkout main
     - yq -i ".image.tag = \"${IMAGE_TAG:-latest}\"" values.yaml # values 파일의 사용 이미지 태그 변경
     - yq -i ".appVersion = \"${IMAGE_TAG:-latest}\"" Chart.yaml # Chart 파일의 앱 버전 태그 변경
