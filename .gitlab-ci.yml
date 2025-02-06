@@ -74,7 +74,7 @@ update_helm_chart:
   script:
     - echo "📝 Updating values.yaml with new tag 👉🏻$(IMAGE_TAG)👈🏻"
     - git checkout main
-    - echo "$(ls -l values.yaml)"
+    - echo "$(ls -l)"
     - yq -i ".image.tag = \"${IMAGE_TAG:-latest}\"" values.yaml # values 파일의 사용 이미지 태그 변경
     - yq -i ".appVersion = \"${IMAGE_TAG:-latest}\"" Chart.yaml # Chart 파일의 앱 버전 태그 변경
     - git add values.yaml
