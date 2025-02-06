@@ -16,41 +16,41 @@ workflow:
     - if: '$CI_COMMIT_BRANCH == "AF-93_CI/CD"'
 
 stages:
-  # - organize # 이미지 정리
-  # - build # 이미지 빌드
-  # - push_dockerhub # 이미지 도커 허브에 푸쉬
+  - organize # 이미지 정리
+  - build # 이미지 빌드
+  - push_dockerhub # 이미지 도커 허브에 푸쉬
   - clone_helm # 헬름차트 클론
   - update_helm # 헬름차트 업데이트
 
-# image_organize:
-#   stage: organize
-#   script:
-#     - docker image prune -a -f # 사용하지 않는 이미지 정리
+image_organize:
+  stage: organize
+  script:
+    - docker image prune -a -f # 사용하지 않는 이미지 정리
 
-# image_build:
-#   stage: build
-#   script:
-#     - echo "Building Docker image..."
-#     - docker build -t $DOCKER_IMAGE .
+image_build:
+  stage: build
+  script:
+    - echo "Building Docker image..."
+    - docker build -t $DOCKER_IMAGE .
 
-# image_push_dockerhub:
-#   stage: push_dockerhub
-#   script:
-#     # 가장 최근 태그를 가져오기
-#     - git fetch --tags
-#     - VERSION_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.0") # 태그가 없다면 기본 0.0.0 태그 부여
+image_push_dockerhub:
+  stage: push_dockerhub
+  script:
+    # 가장 최근 태그를 가져오기
+    - git fetch --tags
+    - VERSION_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.0") # 태그가 없다면 기본 0.0.0 태그 부여
 
-#     # 이미지 태그 부여
-#     - IMAGE_TAG=${VERSION_TAG}.${CI_PIPELINE_ID}
-#     - IMAGE=${DOCKERHUB_REPO}:${IMAGE_TAG}
+    # 이미지 태그 부여
+    - IMAGE_TAG=${VERSION_TAG}.${CI_PIPELINE_ID}
+    - IMAGE=${DOCKERHUB_REPO}:${IMAGE_TAG}
 
-#     # Docker 로그인
-#     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+    # Docker 로그인
+    - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
     
-#     # 태깅 및 푸시
-#     - echo "📤 Pushing $IMAGE image to DockerHub..."
-#     - docker tag $DOCKER_IMAGE $IMAGE
-#     - docker push $IMAGE
+    # 태깅 및 푸시
+    - echo "📤 Pushing $IMAGE image to DockerHub..."
+    - docker tag $DOCKER_IMAGE $IMAGE
+    - docker push $IMAGE
 
 checkout_helm_chart:
   stage: clone_helm
