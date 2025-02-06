@@ -45,7 +45,7 @@ image_push_dockerhub:
     # 이미지 태그 부여
     - IMAGE_TAG=${VERSION_TAG}.${CI_PIPELINE_ID}
     - IMAGE=${DOCKERHUB_REPO}:${IMAGE_TAG}
-    
+
     # 이미지 변수를 전역 범위로 저장
     - echo "IMAGE_TAG=${IMAGE_TAG}" >> build.env
 
@@ -92,4 +92,5 @@ update_helm_chart:
     - git push http://gitlab-ci-token:${HELM_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git main
   # image_push_dockerhub 에서 정의한 환경변수 사용
   dependencies:
+    - checkout_helm_chart
     - image_push_dockerhub
