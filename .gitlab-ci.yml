@@ -68,6 +68,9 @@ checkout_helm_chart:
     - cd $GITLAB_CHART_REPO/user-service
     - echo "$(pwd)"
     - echo "$(ls -l)"
+  artifacts:
+    paths:
+      - /home/gitlab-runner/builds/t1_6-j5m/0/autto/backend-user/charts/
 
 update_helm_chart:
   stage: update_helm
