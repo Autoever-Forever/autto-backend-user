@@ -57,7 +57,7 @@ checkout_helm_chart:
   script:
     - echo "$(pwd)"
     - echo "📥 Cloning Helm Chart repository from GitLab..."
-    - git clone http://gitlab-ci-token:${GITLAB_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git # GitLab 토큰으로 인증 후 clone
+    - git clone http://gitlab-ci-token:${HELM_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git # GitLab 토큰으로 인증 후 clone
     - cd $GITLAB_CHART_REPO/user-service
     - echo "$(pwd)"
     - echo "$(ls)"
@@ -72,4 +72,4 @@ update_helm_chart:
     - git add values.yaml
     - git add Chart.yaml
     - git commit -m "AF-145 cicd:\s이미지 버전 변경 - ${IMAGE_TAG}"
-    - git push http://gitlab-ci-token:${GITLAB_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git main
+    - git push http://gitlab-ci-token:${HELM_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git main
