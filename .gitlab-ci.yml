@@ -59,6 +59,9 @@ checkout_helm_chart:
     - git fetch --tags
     - VERSION_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.0") # 태그가 없다면 기본 0.0.0 태그 부여
 
+    # 이미지 태그 부여
+    - IMAGE_TAG=${VERSION_TAG}.${CI_PIPELINE_ID}
+
     - echo "$(pwd)"
     - echo "📥 Cloning Helm Chart repository from GitLab..."
     - git clone http://gitlab-ci-token:${HELM_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git # GitLab 토큰으로 인증 후 clone
