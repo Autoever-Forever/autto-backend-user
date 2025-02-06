@@ -16,10 +16,16 @@ workflow:
     - if: '$CI_COMMIT_BRANCH == "main"'
 
 stages:
+  - organize # 이미지 정리
   - build # 이미지 빌드
   - push_dockerhub # 이미지 도커 허브에 푸쉬
   - clone_helm # 헬름차트 클론
   - update_helm # 헬름차트 업데이트
+
+image_organize:
+  stage: organize
+  script:
+    - docker image prune -a -f # 사용하지 않는 이미지 정리
 
 image_build:
   stage: build
