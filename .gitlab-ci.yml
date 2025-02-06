@@ -16,8 +16,8 @@ workflow:
     - if: '$CI_COMMIT_BRANCH == "main"'
 
 stages:
-  - build
-  - push
+  - build # 이미지 빌드
+  - push # 이미지 도커 허브에 푸쉬
 
 image_build:
   stage: build
