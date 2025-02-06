@@ -56,16 +56,15 @@ checkout_helm_chart:
   stage: clone_helm
   script:
     - echo "$(pwd)"
-    - cd /home/gitlab-runner/builds/t1_6-j5m/0/autto/
     - echo "📥 Cloning Helm Chart repository from GitLab..."
-    - git clone http://gitlab-ci-token:${GITLAB_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git # GitLab 토큰으로 인증 후 clone
-    - cd $GITLAB_CHART_REPO/user-service
+    - git clone http://gitlab-ci-token:${GITLAB_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git chart-repo # GitLab 토큰으로 인증 후 clone
+    - cd chart-repo/$GITLAB_CHART_REPO/user-service
     - echo "$(pwd)"
 
 update_helm_chart:
   stage: update_helm
   script:
-    - echo "📝 Updating values.yaml with new tag 👉🏻$IMAGE_TAG👈🏻"
+    - echo "📝 Updating values.yaml with new tag 👉🏻$(IMAGE_TAG)👈🏻"
     - git checkout main
     - yq -i ".image.tag = \"${IMAGE_TAG:-latest}\"" values.yaml # values 파일의 사용 이미지 태그 변경
     - yq -i ".appVersion = \"${IMAGE_TAG:-latest}\"" Chart.yaml # Chart 파일의 앱 버전 태그 변경
