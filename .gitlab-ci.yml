@@ -3,7 +3,7 @@ image: ubuntu:latest
 variables:
   DOCKER_IMAGE: "userservice-image:latest"
   REGISTRY_URL: "docker.io"
-  DOCKERHUB_REPO: "auttto/autto-userservice"
+  DOCKERHUB_REPO: "auttto/user-service"
   DOCKERHUB_USERNAME: "auttto"
   GITLAB_TOKEN: "$CI_JOB_TOKEN"  # GitLab CI 환경 변수에서 자동으로 제공되는 토큰
   GITLAB_USERNAME: root # push 작업을 수행할 GitLab 유저명
