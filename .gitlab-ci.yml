@@ -57,9 +57,10 @@ checkout_helm_chart:
   script:
     - echo "$(pwd)"
     - echo "📥 Cloning Helm Chart repository from GitLab..."
-    - git clone http://gitlab-ci-token:${GITLAB_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git chart-repo # GitLab 토큰으로 인증 후 clone
-    - cd chart-repo/$GITLAB_CHART_REPO/user-service
+    - git clone http://gitlab-ci-token:${GITLAB_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git # GitLab 토큰으로 인증 후 clone
+    - cd $GITLAB_CHART_REPO/user-service
     - echo "$(pwd)"
+    - echo "$(ls)"
 
 update_helm_chart:
   stage: update_helm
