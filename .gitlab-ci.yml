@@ -77,7 +77,7 @@ checkout_helm_chart:
 update_helm_chart:
   stage: update_helm
   script:
-    - echo "📝 Updating values.yaml with new tag 👉🏻$(IMAGE_TAG)👈🏻"
+    - echo "📝 Updating values.yaml with new tag 👉🏻$IMAGE_TAG👈🏻"
     - cd $GITLAB_CHART_REPO/user-service
     - echo "$(pwd)"
     - echo "$(ls -l)"
