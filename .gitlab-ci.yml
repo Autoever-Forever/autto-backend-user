@@ -6,9 +6,11 @@ variables:
   DOCKERHUB_REPO: "auttto/autto-userservice"
   DOCKERHUB_USERNAME: "auttto"
   GITLAB_TOKEN: "$CI_JOB_TOKEN"  # GitLab CI 환경 변수에서 자동으로 제공되는 토큰
+  GITLAB_USERNAME: root # push 작업을 수행할 GitLab 유저명
   # GITLAB_URL  # GitLab 주소 - secret variable 에 정의
   # DOCKERHUB_PASSWORD # DOCKERHUB 비밀번호 - secret variable 에 정의
-  #GITLAB_CHART_REPO  # Helm 차트의 GitLab 레포지토리 이름 - secret variable 에 정의
+  # GITLAB_CHART_REPO  # Helm 차트의 GitLab 레포지토리 이름 - secret variable 에 정의
+  # GITLAB_EMAIL # push 작업을 수행할 GitLab 유저의 이메일 - secret variable 에 정의
 
 # main 브랜치에서만 파이프라인 실행
 workflow:
@@ -55,20 +57,26 @@ image_push_dockerhub:
 checkout_helm_chart:
   stage: clone_helm
   script:
-    - echo "$(pwd)"
     - echo "📥 Cloning Helm Chart repository from GitLab..."
-    - git clone http://gitlab-ci-token:${GITLAB_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git chart-repo # GitLab 토큰으로 인증 후 clone
-    - cd chart-repo/$GITLAB_CHART_REPO/user-service
-    - echo "$(pwd)"
+    - git clone http://gitlab-ci-token:${HELM_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git # GitLab 토큰으로 인증 후 clone
+  artifacts:
+    paths:
+      - /home/gitlab-runner/builds/t1_6-j5m/0/autto/backend-user/charts/
 
 update_helm_chart:
   stage: update_helm
   script:
-    - echo "📝 Updating values.yaml with new tag 👉🏻$(IMAGE_TAG)👈🏻"
+    - echo "📝 Updating values.yaml with new tag 👉🏻$IMAGE_TAG👈🏻"
+    - cd $GITLAB_CHART_REPO/user-service
+
+    # git 유저 등록
+    - git config --global user.email ${GITLAB_EMAIL}
+    - git config --global user.name ${GITLAB_USERNAME}
+    
     - git checkout main
     - yq -i ".image.tag = \"${IMAGE_TAG:-latest}\"" values.yaml # values 파일의 사용 이미지 태그 변경
     - yq -i ".appVersion = \"${IMAGE_TAG:-latest}\"" Chart.yaml # Chart 파일의 앱 버전 태그 변경
-    - git add valuse.yaml
+    - git add values.yaml
     - git add Chart.yaml
-    - git commit -m "AF-145 cicd:\s이미지 버전 변경 - ${IMAGE_TAG}"
-    - git push http://gitlab-ci-token:${GITLAB_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git main
+    - git commit -m "AF-145 cicd:\ 이미지 버전 변경 - $IMAGE_TAG"
+    - git push http://gitlab-ci-token:${HELM_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git main
