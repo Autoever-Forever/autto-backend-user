@@ -15,47 +15,28 @@ variables:
 # main 브랜치에서만 파이프라인 실행
 workflow:
   rules:
-    - if: '$CI_COMMIT_BRANCH == "AF-93_CI/CD"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
 stages:
-  # - organize # 이미지 정리
-  # - build # 이미지 빌드
-  # - push_dockerhub # 이미지 도커 허브에 푸쉬
+  - organize # 이미지 정리
+  - build # 이미지 빌드
+  - push_dockerhub # 이미지 도커 허브에 푸쉬
   - clone_helm # 헬름차트 클론
   - update_helm # 헬름차트 업데이트
 
-# image_organize:
-#   stage: organize
-#   script:
-#     - docker image prune -a -f # 사용하지 않는 이미지 정리
+image_organize:
+  stage: organize
+  script:
+    - docker image prune -a -f # 사용하지 않는 이미지 정리
 
-# image_build:
-#   stage: build
-#   script:
-#     - echo "Building Docker image..."
-#     - docker build -t $DOCKER_IMAGE .
+image_build:
+  stage: build
+  script:
+    - echo "Building Docker image..."
+    - docker build -t $DOCKER_IMAGE .
 
-# image_push_dockerhub:
-#   stage: push_dockerhub
-#   script:
-#     # 가장 최근 태그를 가져오기
-#     - git fetch --tags
-#     - VERSION_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.0") # 태그가 없다면 기본 0.0.0 태그 부여
-
-#     # 이미지 태그 부여
-#     - IMAGE_TAG=${VERSION_TAG}.${CI_PIPELINE_ID}
-#     - IMAGE=${DOCKERHUB_REPO}:${IMAGE_TAG}
-
-#     # Docker 로그인
-#     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-    
-#     # 태깅 및 푸시
-#     - echo "📤 Pushing $IMAGE image to DockerHub..."
-#     - docker tag $DOCKER_IMAGE $IMAGE
-#     - docker push $IMAGE
-
-checkout_helm_chart:
-  stage: clone_helm
+image_push_dockerhub:
+  stage: push_dockerhub
   script:
     # 가장 최근 태그를 가져오기
     - git fetch --tags
@@ -63,13 +44,21 @@ checkout_helm_chart:
 
     # 이미지 태그 부여
     - IMAGE_TAG=${VERSION_TAG}.${CI_PIPELINE_ID}
+    - IMAGE=${DOCKERHUB_REPO}:${IMAGE_TAG}
 
-    - echo "$(pwd)"
+    # Docker 로그인
+    - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+    
+    # 태깅 및 푸시
+    - echo "📤 Pushing $IMAGE image to DockerHub..."
+    - docker tag $DOCKER_IMAGE $IMAGE
+    - docker push $IMAGE
+
+checkout_helm_chart:
+  stage: clone_helm
+  script:
     - echo "📥 Cloning Helm Chart repository from GitLab..."
     - git clone http://gitlab-ci-token:${HELM_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git # GitLab 토큰으로 인증 후 clone
-    - cd $GITLAB_CHART_REPO/user-service
-    - echo "$(pwd)"
-    - echo "$(ls -l)"
   artifacts:
     paths:
       - /home/gitlab-runner/builds/t1_6-j5m/0/autto/backend-user/charts/
@@ -79,8 +68,7 @@ update_helm_chart:
   script:
     - echo "📝 Updating values.yaml with new tag 👉🏻$IMAGE_TAG👈🏻"
     - cd $GITLAB_CHART_REPO/user-service
-    - echo "$(pwd)"
-    - echo "$(ls -l)"
+
     # git 유저 등록
     - git config --global user.email ${GITLAB_EMAIL}
     - git config --global user.name ${GITLAB_USERNAME}
