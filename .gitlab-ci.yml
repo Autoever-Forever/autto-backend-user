@@ -82,10 +82,12 @@ checkout_helm_chart:
   script:
     # IDC
     - echo "📥 Cloning Helm Chart repository from GitLab..."
+    - echo "---------$(pwd)"
     - git clone http://gitlab-ci-token:${HELM_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_REPO}.git # GitLab 토큰으로 인증 후 clone
 
     # AWS
     - echo "📥 Cloning Helm Chart repository from GitLab..."
+    - echo "---------$(pwd)"
     - git clone http://gitlab-ci-token:${HELM_TOKEN}@${GITLAB_URL}/${GITLAB_CHART_AWS_REPO}.git # GitLab 토큰으로 인증 후 clone
   artifacts:
     paths:
