@@ -101,6 +101,7 @@ update_helm_chart:
     # IDC
     - echo "📝 Updating values.yaml of IDC's Helm with new tag 👉🏻$IMAGE_TAG👈🏻"
     - echo "---------$(pwd)"
+    - echo "$CI_PROJECT_DIR"
     - cd $GITLAB_CHART_REPO/$CHARTNAME
 
     # git 유저 등록
@@ -117,8 +118,7 @@ update_helm_chart:
 
     # AWS
     - echo "📝 Updating values.yaml of AWS's Helm with new tag 👉🏻$IMAGE_TAG👈🏻"
-    - cd .. 
-    - cd ..
+    - cd $CI_PROJECT_DIR
     - cd $GITLAB_CHART_AWS_REPO/$CHARTNAME
     
     - git checkout main
