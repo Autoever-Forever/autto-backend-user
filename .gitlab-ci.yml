@@ -119,7 +119,10 @@ update_helm_chart:
     # AWS
     - echo "📝 Updating values.yaml of AWS's Helm with new tag 👉🏻$IMAGE_TAG👈🏻"
     - cd $CI_PROJECT_DIR
+    - echo "---------$(pwd)"
+    - echo "---------$(ls)"
     - cd $GITLAB_CHART_AWS_REPO/$CHARTNAME
+    - echo "---------$(pwd)"
     
     - git checkout main
     - yq -i ".image.tag = \"${IMAGE_TAG:-latest}\"" values.yaml # values 파일의 사용 이미지 태그 변경
